@@ -19,21 +19,26 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Main Activity";
+    public static final String MyPREFERENCES = "MyPrefs" ;
     private SensorManager sensorManager;
     Sensor acc, mag_field;
     float[] accData = new float[3];
     float[] magData = new float[3];
     float[] orient = new float[3];
     float[] rotMat = new float[9];
-    float[] I = new float[9];
     float x, y, z;
     float mag, magDelta;
     float magPre = 0;
-    int stepCount = 0;
-    TextView txt1, txtres;
+    static int stepCount = 0;
+    TextView txt1, txtres, tv_angle;
     ImageView img1, img2;
-    EditText num1, num2;
+    EditText num1, num2, locTxt;
     Button btn1, btn2;
+    static float n1, n2;
+    static float res = 0;
+    static float azimuth;
+    String res1;
+
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -48,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
         num2 = findViewById(R.id.num2);
         btn1 = findViewById(R.id.btn1);
         btn2 = findViewById(R.id.btn2);
+        tv_angle = findViewById(R.id.tv_angle);
 
-
-
+        locTxt = findViewById(R.id.locTxt);
 
         /* stride length
          females: your height * 0.413
@@ -62,9 +67,8 @@ public class MainActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
-                float n1, n2, res;
-                n1 = Float.parseFloat(num1.getText().toString());
-                n2 = Float.parseFloat(num2.getText().toString());
+                n1 = Float.parseFloat(String.valueOf(num1.getText()));
+                n2 = Float.parseFloat(String.valueOf(num2.getText()));
                 res = n1 * n2;
                 txtres.setText(Float.toString(res));
             }
@@ -74,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view) {
-                Intent i = new Intent(MainActivity.this, WifiActivity.class);
+                res1 = (locTxt.getText().toString());
+                Intent i = new Intent(MainActivity.this, Activity2.class);
+                i.putExtra("location_user", res1);
                 startActivity(i);
             }
         });
@@ -118,15 +124,16 @@ public class MainActivity extends AppCompatActivity {
                 txt1.setText(String.valueOf(stepCount));
 
                 // direction
-                boolean success = SensorManager.getRotationMatrix(rotMat, I, accData, magData);
-                if(success){
-                    SensorManager.getOrientation(rotMat, orient);
-                    float azimuth = orient[0]; //in radians
-                    azimuth = azimuth * 360 / (2 * (float) Math.PI);
-                }
+                SensorManager.getRotationMatrix(rotMat, null, accData, magData);
+                SensorManager.getOrientation(rotMat, orient);
 
+                float azimuth = orient[0]; //in radians
+                azimuth = azimuth * 360 / (2 * (float) Math.PI); // in degree
+                Log.i("Angle", String.valueOf(azimuth));
 
                 img2.setRotation((float) (-orient[0]*180/3.14159));
+                //txt4.setText((int) (-orient[0]*180/3.14159));
+
             }
 
             @Override
@@ -147,7 +154,15 @@ public class MainActivity extends AppCompatActivity {
                 SensorManager.getRotationMatrix(rotMat, null, accData, magData);
                 SensorManager.getOrientation(rotMat, orient);
 
+                azimuth = orient[0]; //in radians
+                float angle_radian=(int)Math.toDegrees(azimuth);
+                azimuth = azimuth * 360 / (2 * (float) Math.PI);
+                Log.i("Angle", String.valueOf(azimuth));
+                tv_angle.setText(angle_radian+" degrees");
+
                 img2.setRotation((float) (-orient[0]*180/3.14159));
+               // txt4.setText((int) (-orient[0]*180/3.14159));
+
             }
 
             @Override
@@ -159,4 +174,3 @@ public class MainActivity extends AppCompatActivity {
         sensorManager.registerListener(sensorEventListenerMag, mag_field, SensorManager.SENSOR_DELAY_NORMAL);
     }
 }
-

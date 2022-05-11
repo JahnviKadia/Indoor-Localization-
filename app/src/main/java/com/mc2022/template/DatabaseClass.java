@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {WifiModel.class}, version = 1)
+@Database(entities = {WifiModel.class}, version = 3)
 public abstract class DatabaseClass extends RoomDatabase {
     public abstract DaoClass getDao();
 

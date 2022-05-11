@@ -17,8 +17,15 @@
         android:theme="@style/Theme.MyApplication">
 
         <activity
-            android:name=".WifiActivity"
+            android:name=".PDRActivity"
             android:exported="false" />
+        <activity
+            android:name=".ResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity2"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
