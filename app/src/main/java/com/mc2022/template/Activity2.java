@@ -85,26 +85,26 @@ public class Activity2 extends AppCompatActivity {
             public void onClick (View view) {
                 if(deviceList.size() != 0) {
                     count = 0;
-                    if(deviceList.size() < 30) {
+                    if(deviceList.size() < 10) {
                         count = 1;
                     }
 
-                   else if(deviceList.size() < 25){
+                   else if(deviceList.size() < 25 && deviceList.size() > 10){
                         count = 2;
                     }
 
-                    else if(deviceList.size() < 10){
+                    else if(deviceList.size() < 30 && deviceList.size() > 25){
                         count = 3;
                     }
 
-                    else if(deviceList.size() < 40){
+                    else if(deviceList.size() < 40 && deviceList.size() > 30){
                         count = 4;
                     }
 
 
 
                     if(count == 1) {
-                        t1.setText("Staircase Girls Hostel");
+                        t1.setText("Washroom");
                     }
 
                     else if(count == 2){
@@ -112,7 +112,7 @@ public class Activity2 extends AppCompatActivity {
                     }
 
                     else if(count == 3){
-                        t1.setText("Washroom");
+                        t1.setText("Staircase Girls Hostel");
                     }
 
                     else if(count == 4){
